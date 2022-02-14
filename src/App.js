@@ -35,7 +35,6 @@ class App extends React.Component {
 
   render() {
     return (<div className="App">
-      <p>Frank and Claire's Wordle!</p>
       <NewWordButton onButtonClick={this.handleNewWordButtonClick} />
       <Clue clue={this.state.clue} clueVisible={this.state.clueVisible} onButtonClick={this.handleClueButtonClick} />
       <LetterGrid letterGrid={this.state.letterGrid} />
