@@ -1,0 +1,76 @@
+.App {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgb(255, 255, 255);
+}
+
+.grid {
+  width: 90%
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.letter {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  margin: 5px;
+  width: 20%;
+  height: 8%;
+  min-height: 50px;
+}
+
+.keyboardButton {
+  border-radius: 7px;
+  background-color: darkgrey;
+  color: white;
+  font: bold;
+  min-width: 20px;
+  min-height: 50px;
+  margin: 3px;
+  padding: 0px;
+  border: 0px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+}
+
+#noGuess {
+  background-color: #282c34;
+}
+
+#notPressed {
+  background-color: darkgrey;
+  color: white;
+}
+
+#perfectMatch {
+  background-color: green;
+  color: white;
+}
+
+#noMatch {
+  background-color: black;
+  color: white;
+}
+
+#nearMatch {
+  background-color: yellow;
+  color: black;
+}
+
+#specialKey {
+  min-width: 50px;
+}
