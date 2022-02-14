@@ -9,6 +9,25 @@
   color: rgb(255, 255, 255);
 }
 
+.buttonBar {
+  display: flex;
+  align-items: center;
+  justify-content: justify;
+  flex-direction: row;
+}
+
+.newWordButton {
+  margin: 10px;
+}
+
+.clue {
+  margin: 10px;
+}
+
+.newWordButton {
+  margin: 10px;
+}
+
 .grid {
   width: 90%
 }

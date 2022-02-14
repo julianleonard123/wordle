@@ -35,8 +35,10 @@ class App extends React.Component {
 
   render() {
     return (<div className="App">
-      <NewWordButton onButtonClick={this.handleNewWordButtonClick} />
-      <Clue clue={this.state.clue} clueVisible={this.state.clueVisible} onButtonClick={this.handleClueButtonClick} />
+      <div className="buttonBar">
+        <NewWordButton onButtonClick={this.handleNewWordButtonClick} />
+        <Clue clue={this.state.clue} clueVisible={this.state.clueVisible} onButtonClick={this.handleClueButtonClick} />
+      </div>
       <LetterGrid letterGrid={this.state.letterGrid} />
       <KeyboardGrid keyboard={this.state.keyboardGrid} onKeyPress={this.handleKeyboardEntry} />
     </div>
@@ -74,7 +76,7 @@ class App extends React.Component {
         activeColumn: state.activeColumn + columnIncrement,
       }));
   }
-  
+
   handleClueButtonClick() {
     this.setState(() => (
       {
@@ -165,7 +167,7 @@ class App extends React.Component {
     return Array.from(new Set(arrayOfLetters));;
   }
 
-  
+
 }
 
 class Clue extends React.Component {
@@ -178,7 +180,7 @@ class Clue extends React.Component {
       );
     } else {
       return (
-        <div key='clue'>
+        <div key='clue' className='clue'>
           <ClueButton onButtonClick={this.props.onButtonClick} />
         </div>
       )
@@ -223,11 +225,11 @@ class LetterGrid extends React.Component {
 
 function LetterRows(props) {
   return props.letterGrid.map((letterRow, index) => {
-      return (
-        <div key={index} className='row'>
-          <Letters letters={letterRow} />
-        </div>
-      )
+    return (
+      <div key={index} className='row'>
+        <Letters letters={letterRow} />
+      </div>
+    )
   });
 }
 
@@ -254,7 +256,7 @@ function KeyboardRows(props) {
         <KeyboardButtons keys={keyboardRow} onKeyPress={props.onKeyPress} />
       </div>
     )
-});
+  });
 }
 
 function KeyboardButtons(props) {
