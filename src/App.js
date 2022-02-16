@@ -1,4 +1,8 @@
 import './App.css';
+import { Clue } from './components/Clue';
+import { NewWordButton } from './components/NewWordButton';
+import { LetterGrid } from './components/LetterGrid';
+import { KeyboardGrid } from './components/KeyboardGrid';
 import React from 'react';
 
 const LETTER_GRID_WIDTH = 5;
@@ -16,9 +20,43 @@ class App extends React.Component {
     var targetWord = this.getRandomWordFromFile();
     this.state = this.initalState(targetWord);
 
-    this.handleKeyboardEntry = this.handleKeyboardEntry.bind(this);
-    this.handleClueButtonClick = this.handleClueButtonClick.bind(this);
     this.handleNewWordButtonClick = this.handleNewWordButtonClick.bind(this);
+    this.handleClueButtonClick = this.handleClueButtonClick.bind(this);
+    this.handleKeyboardEntry = this.handleKeyboardEntry.bind(this);
+    this.onKeyPressed = this.onKeyPressed.bind(this);
+  }
+
+  onKeyPressed(e) {
+    var keyPressed = '';
+    if (e.key === 'Enter') {
+      keyPressed = 'ENTER';
+    } else if (e.key === 'Backspace') {
+      keyPressed = 'DEL';
+    } else {
+      keyPressed = e.key.toUpperCase();
+    }
+
+    var allKeys = KEYBOARD_LETTERS.flat();
+    if (allKeys.includes(keyPressed)) {
+      this.handleKeyboardEntry(keyPressed);
+    }
+  }
+
+  render() {
+    console.log('render again');
+    return (
+      <div className="App"
+        onKeyDown={this.onKeyPressed}
+        tabIndex="0"
+      >
+        <div className="buttonBar">
+          <NewWordButton onButtonClick={this.handleNewWordButtonClick} />
+          <Clue clue={this.state.clue} clueVisible={this.state.clueVisible} onButtonClick={this.handleClueButtonClick} />
+        </div>
+        <LetterGrid letterGrid={this.state.letterGrid} />
+        <KeyboardGrid keyboard={this.state.keyboardGrid} onKeyPress={this.handleKeyboardEntry} />
+      </div>
+    );
   }
 
   initalState(targetWord) {
@@ -31,18 +69,6 @@ class App extends React.Component {
       clue: targetWord.clue,
       clueVisible: false,
     };
-  }
-
-  render() {
-    return (<div className="App">
-      <div className="buttonBar">
-        <NewWordButton onButtonClick={this.handleNewWordButtonClick} />
-        <Clue clue={this.state.clue} clueVisible={this.state.clueVisible} onButtonClick={this.handleClueButtonClick} />
-      </div>
-      <LetterGrid letterGrid={this.state.letterGrid} />
-      <KeyboardGrid keyboard={this.state.keyboardGrid} onKeyPress={this.handleKeyboardEntry} />
-    </div>
-    );
   }
 
   handleKeyboardEntry(key) {
@@ -81,7 +107,8 @@ class App extends React.Component {
     this.setState(() => (
       {
         clueVisible: true,
-      }));
+      })
+    );
   }
 
   handleNewWordButtonClick() {
@@ -123,16 +150,29 @@ class App extends React.Component {
   }
 
   checkWord(letterGrid, activeRow, targetWord) {
-    letterGrid[activeRow].forEach((letterRow, index) => {
-      if (letterRow.letter === targetWord.charAt(index)) {
-        letterRow.colour = PERFACT_MATCH_COLOUR_CODE;
-      } else if (targetWord.includes(letterRow.letter)) {
-        letterRow.colour = NEAR_MATCH_COLOUR_CODE;
-      } else {
-        letterRow.colour = NO_MATCH_COLOUR_CODE;
+    
+    var matchIndexes = [];
+    var remainingLetters = targetWord;
+    // first pass find the perfect matches.
+    letterGrid[activeRow].forEach((letter, index) => {
+      if (letter.letter === targetWord.charAt(index)) {
+        letter.colour = PERFACT_MATCH_COLOUR_CODE;
+        remainingLetters = remainingLetters.replace(letter.letter, '');
+        matchIndexes.push(index);
       }
     });
 
+    // second pass find near matches
+    letterGrid[activeRow].forEach((letter, index) => {
+      if (!matchIndexes.includes(index)) {
+        if (remainingLetters.includes(letter.letter)) {
+          letter.colour = NEAR_MATCH_COLOUR_CODE;
+          remainingLetters = remainingLetters.replace(letter.letter, '');
+        } else {
+          letter.colour = NO_MATCH_COLOUR_CODE;
+        }
+      }
+    });
     return letterGrid;
   }
 
@@ -167,108 +207,6 @@ class App extends React.Component {
     return Array.from(new Set(arrayOfLetters));;
   }
 
-
-}
-
-class Clue extends React.Component {
-  render() {
-    if (this.props.clueVisible) {
-      return (
-        <div key='clue'>
-          {this.props.clue}
-        </div>
-      );
-    } else {
-      return (
-        <div key='clue' className='clue'>
-          <ClueButton onButtonClick={this.props.onButtonClick} />
-        </div>
-      )
-    }
-  }
-}
-
-function NewWordButton(props) {
-  function handleButtonClick(e) {
-    props.onButtonClick(e.target.value);
-  }
-
-  return (
-    <div className='newWordButton'>
-      <button onClick={handleButtonClick}>
-        New word please!
-      </button>
-    </div>
-  )
-}
-
-function ClueButton(props) {
-  function handleButtonClick(e) {
-    props.onButtonClick(e.target.value);
-  }
-
-  return (
-    <button onClick={handleButtonClick}>
-      Click me for clue!
-    </button>
-  )
-}
-class LetterGrid extends React.Component {
-  render() {
-    return (
-      <div key='letterGrid' className='grid'>
-        <LetterRows letterGrid={this.props.letterGrid} />
-      </div>
-    );
-  }
-}
-
-function LetterRows(props) {
-  return props.letterGrid.map((letterRow, index) => {
-    return (
-      <div key={index} className='row'>
-        <Letters letters={letterRow} />
-      </div>
-    )
-  });
-}
-
-function Letters(props) {
-  return props.letters.map((letter) =>
-    <div key={letter.key} id={letter.colour} className='letter'>
-      {letter.letter}
-    </div>
-  )
-}
-
-function KeyboardGrid(props) {
-  return (
-    <div key='keyboardGrid' className='grid'>
-      <KeyboardRows keyboard={props.keyboard} onKeyPress={props.onKeyPress} />
-    </div>
-  )
-}
-
-function KeyboardRows(props) {
-  return props.keyboard.map((keyboardRow, index) => {
-    return (
-      <div key={index} className='row'>
-        <KeyboardButtons keys={keyboardRow} onKeyPress={props.onKeyPress} />
-      </div>
-    )
-  });
-}
-
-function KeyboardButtons(props) {
-  function handleButtonClick(e) {
-    props.onKeyPress(e.target.value);
-  }
-
-  return props.keys.map((key) =>
-    <button key={key.letter} id={key.colour} value={key.letter} className='keyboardButton' onClick={handleButtonClick}>
-      {key.letter}
-    </button>
-  )
 }
 
 export default App;
