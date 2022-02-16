@@ -77,7 +77,7 @@
             "clue": "Not together but ..."
         },
         {
-            "word": "POINT",
+            "word": "KNIFE",
             "clue": "A sharp _____."
         },
         {
@@ -91,10 +91,6 @@
         {
             "word": "TIGHT",
             "clue": "Not loose, but.."
-        },
-        {
-            "word": "FRANK",
-            "clue": "Claire's twin."
         },
         {
             "word": "NIGHT",
@@ -114,7 +110,7 @@
         },
         {
             "word": "CARDS",
-            "clue": "There's 52 of me in a dec."
+            "clue": "There's 52 of me in a deck."
         },
         {
             "word": "PRIDE",
@@ -122,7 +118,11 @@
         },
         {
             "word": "PRIZE",
-            "clue": "Win me for coming in first place."
+            "clue": "Win me for in a raffle."
+        },
+        {
+            "word": "MEDAL",
+            "clue": "Win me for coming top 3."
         },
         {
             "word": "PRICE",
